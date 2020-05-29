@@ -1,12 +1,11 @@
-﻿# CMAKE 版本
+﻿# CMAKE 最低版本
 cmake_minimum_required(VERSION 3.7)
 
 # 项目名称
 project(grammer)
 
+# 设置自动生成 moc 文件
 set(CMAKE_AUTOMOC ON)
-
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.14.2\\5.14.2\\mingw73_64")
 
 # 设置 SOURCES 为源文件
 set(SOURCES
@@ -14,6 +13,7 @@ set(SOURCES
     src/mainwindow.cpp
 )
 
+# 头文件
 set(HEADERS
     include/mainwindow.h
 )
