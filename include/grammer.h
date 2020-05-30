@@ -24,9 +24,11 @@ private:
     //  vocabulary of terminal，vocabulary of nonterminal
 public:
     Grammer();
-    Grammer(std::string);
+    Grammer(std::string inputText);
     void GetFirstSet();
     void GetFollowSet();
+
+    void Print();
 };
 
 #endif

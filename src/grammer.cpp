@@ -1,4 +1,4 @@
-﻿#include "grammer.h"
+#include "grammer.h"
 
 Grammer::Grammer()
 {
@@ -8,6 +8,9 @@ Grammer::Grammer()
 Grammer::Grammer(std::string inputText)
 {
     inputText = "S->a|bc|d|dA\nA->bd";
+
+    // 向输入文本串末尾加换行符
+    inputText = inputText + "\n";
 
     while (!inputText.empty())
     {
@@ -40,7 +43,7 @@ Grammer::Grammer(std::string inputText)
         tempProduction.SetLeftPart(tempExpression);
         tempExpression.Clear();
 
-        // 扫描产生式有]右部
+        // 扫描产生式右部
         for (int i = 0; (inputText[i] != '\n') && (i < (int)inputText.length()); ++i, index = i)
         {
             // 找到一个表达式
@@ -63,4 +66,6 @@ Grammer::Grammer(std::string inputText)
         // 找到一个产生式
         productionSet.push_back(tempProduction);
     }
+
+    start = productionSet[0].GetLeftPart();
 }
