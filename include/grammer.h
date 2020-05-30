@@ -1,4 +1,4 @@
-﻿#ifndef GRAMMER_H
+#ifndef GRAMMER_H
 #define GRAMMER_H
 
 #include "production.h"
@@ -25,6 +25,10 @@ private:
 public:
     Grammer();
     Grammer(std::string inputText);
+
+    void SetType(int type);
+    int GetType();
+
     void GetFirstSet();
     void GetFollowSet();
 

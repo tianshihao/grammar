@@ -69,3 +69,29 @@ Grammer::Grammer(std::string inputText)
 
     start = productionSet[0].GetLeftPart();
 }
+
+void Grammer::Print()
+{
+    std::cout << "grammer" << std::endl;
+    std::cout << "start symbol: " << m_start.GetExpression() << std::endl;
+    std::cout << "production" << std::endl;
+
+    for (int i = 0; i < (int)m_productionSet.size(); ++i)
+    {
+        std::cout << "production " << i + 1 << ": ";
+        std::cout << m_productionSet[i].GetLeftPart().GetExpression() << " -> ";
+
+        for (int j = 0; j < (int)m_productionSet[i].GetRightPart().size(); ++j)
+        {
+            std::cout << m_productionSet[i].GetRightPart()[j].GetExpression();
+            if (j != (int)m_productionSet[i].GetRightPart().size() - 1)
+            {
+                std::cout << " | ";
+            }
+            else
+            {
+                std::cout << std::endl;
+            }
+        }
+    }
+}
