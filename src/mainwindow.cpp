@@ -29,3 +29,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 MainWindow::~MainWindow()
 {
 }
+
+void MainWindow::ParseText()
+{
+    // 获取输入文本
+    QString inputText = m_inputArea->toPlainText();
+
+    Grammer G(inputText.toStdString());
+
+    return;
+}

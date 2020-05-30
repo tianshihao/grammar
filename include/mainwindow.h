@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "grammer.h"
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QTextBlock>
@@ -22,5 +23,7 @@ private:
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void ParseText();
 };
 #endif // MAINWINDOW_H
