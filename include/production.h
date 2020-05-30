@@ -13,7 +13,7 @@ private:
 
 public:
     Expression GetLeftPart();
-    Expression GetRightPart();
+    std::vector<Expression> GetRightPart();
 
     void SetLeftPart(Expression e);
     void SetRightPart(Expression e);

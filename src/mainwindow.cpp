@@ -43,21 +43,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     this->setCentralWidget(m_centralWidget);
 
-    connect(m_pushButton1, SIGNAL(clicked()), this, SLOT(ParseText()));
+    connect(m_pushButton1, SIGNAL(clicked()), this, SLOT(PassText()));
 }
 
 MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::ParseText()
+void MainWindow::PassText()
 {
     // 获取输入文本
-    QString inputText = m_inputArea->toPlainText();
-
-    Grammer G(inputText.toStdString());
-
-    m_outputArea->setText((QString) "啊啊啊啊");
+    Grammer G(m_inputArea->toPlainText().toStdString());
 
     return;
 }

@@ -10,6 +10,11 @@
 
 变量名：QT_PLUGIN_PATH
 变量值：C:\Qt\Qt5.14.2\5.14.2\mingw73_64\plugins
+副作用：QtCreator 犯病
+
+正确的环境变量
+变量名：QT_QPA_PLATFORM_PLUGIN_PATH
+变量值：C:\Qt\Qt5.14.2\5.14.2\mingw73_64\plugins\platforms
 
 3. 添加
 

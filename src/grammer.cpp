@@ -1,4 +1,4 @@
-#include "grammer.h"
+﻿#include "grammer.h"
 
 Grammer::Grammer()
 {
@@ -7,8 +7,21 @@ Grammer::Grammer()
 
 Grammer::Grammer(std::string inputText)
 {
-    inputText = "S->a|bc|d|dA\nA->bd";
+    ParseText(inputText);
+}
 
+void Grammer::SetType(int type)
+{
+    m_type = type;
+}
+
+int Grammer::GetType()
+{
+    return m_type;
+}
+
+void Grammer::ParseText(std::string inputText)
+{
     // 向输入文本串末尾加换行符
     inputText = inputText + "\n";
 
@@ -64,10 +77,12 @@ Grammer::Grammer(std::string inputText)
         inputText.erase(0, index + 1);
 
         // 找到一个产生式
-        productionSet.push_back(tempProduction);
+        m_productionSet.push_back(tempProduction);
     }
 
-    start = productionSet[0].GetLeftPart();
+    m_start = m_productionSet[0].GetLeftPart();
+
+    Print();
 }
 
 void Grammer::Print()

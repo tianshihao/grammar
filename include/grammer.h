@@ -1,9 +1,10 @@
-#ifndef GRAMMER_H
+﻿#ifndef GRAMMER_H
 #define GRAMMER_H
 
 #include "production.h"
 #include <QtCore>
 #include <iostream>
+#include <iterator>
 #include <set>
 #include <string>
 #include <vector>
@@ -17,9 +18,11 @@ private:
     // 终结符号集
     std::set<char> VT;
     // 开始符号
-    Expression start;
+    Expression m_start;
     // 产生式集
-    std::vector<Production> productionSet;
+    std::vector<Production> m_productionSet;
+
+    int m_type;
 
     //  vocabulary of terminal，vocabulary of nonterminal
 public:
@@ -32,6 +35,7 @@ public:
     void GetFirstSet();
     void GetFollowSet();
 
+    void ParseText(std::string inputText);
     void Print();
 };
 

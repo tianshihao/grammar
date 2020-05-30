@@ -10,6 +10,7 @@ private:
     std::string e;
 
 public:
+    std::string GetExpression();
     void PushBack(char);
     void Clear();
 };

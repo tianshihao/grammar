@@ -10,6 +10,7 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 #include <QVBoxLayout>
+#include <QtCore>
 #include <iostream>
 
 class MainWindow : public QMainWindow
@@ -33,6 +34,6 @@ public:
     ~MainWindow();
 
 public slots:
-    void ParseText();
+    void PassText();
 };
 #endif // MAINWINDOW_H
