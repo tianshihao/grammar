@@ -10,7 +10,7 @@ set(CMAKE_AUTOMOC ON)
 # 设置 SOURCES 为源文件
 set(SOURCES
     src/mainwindow.cpp
-    src/expression.cpp
+    src/body.cpp
     src/production.cpp
     src/grammer.cpp
 )
@@ -23,6 +23,8 @@ set(HEADERS
 # add_executable() 须放在 target_link_libraries() 之前
 # 向项目中添加使用指定源文件的可执行文件
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} main.cpp)
+
+add_executable(test test.cpp)
 
 # 设置该目标的 build 命令中应包含的目录
 # 相当于运行 g++ 时的 -I${PROJECT_SOURCE_DIR}/include

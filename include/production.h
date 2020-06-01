@@ -1,22 +1,22 @@
 ﻿#ifndef PRODUCITON_H
 #define PRODUCTION_H
 
-#include "expression.h"
+#include "body.h"
 #include <vector>
 
 // 产生式
 class Production
 {
 private:
-    Expression leftPart;
-    std::vector<Expression> rightPart;
+    Body m_leftSide;
+    std::vector<Body> m_rightSide;
 
 public:
-    Expression GetLeftPart();
-    std::vector<Expression> GetRightPart();
+    Body GetLeftSide();
+    std::vector<Body> GetRightSide();
 
-    void SetLeftPart(Expression e);
-    void SetRightPart(Expression e);
+    void SetLeftPart(Body e);
+    void SetRightPart(Body e);
 };
 
 #endif // PRODUCTION_H

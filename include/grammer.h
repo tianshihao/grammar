@@ -18,7 +18,7 @@ private:
     // 终结符号集
     std::set<char> VT;
     // 开始符号
-    Expression m_start;
+    Body m_start;
     // 产生式集
     std::vector<Production> m_productionSet;
 
@@ -33,6 +33,7 @@ public:
     int GetType();
 
     void GetFirstSet();
+    void DFSTraverse(Body &, char);
     void GetFollowSet();
 
     void ParseText(std::string inputText);

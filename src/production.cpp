@@ -1,21 +1,21 @@
 #include "production.h"
 
-Expression Production::GetLeftPart()
+Body Production::GetLeftSide()
 {
-    return leftPart;
+    return m_leftSide;
 }
 
-std::vector<Expression> Production::GetRightPart()
+std::vector<Body> Production::GetRightSide()
 {
-    return rightPart;
+    return m_rightSide;
 }
 
-void Production::SetLeftPart(Expression e)
+void Production::SetLeftPart(Body e)
 {
-    leftPart = e;
+    m_leftSide = e;
 }
 
-void Production::SetRightPart(Expression e)
+void Production::SetRightPart(Body e)
 {
-    rightPart.push_back(e);
+    m_rightSide.push_back(e);
 }
