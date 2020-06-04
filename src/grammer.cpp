@@ -1,101 +1,20 @@
-#include "grammer.h"
+﻿#include "grammer.h"
 
+// 构造函数
 Grammer::Grammer()
 {
     std::cout << "This is a grammer" << std::endl;
 }
 
+// 构造函数重载
 Grammer::Grammer(std::string inputText)
 {
     ParseText(inputText);
-    GetFirstSet();
+    CalcFirstSet();
+    Print();
 }
 
-void Grammer::SetType(int type)
-{
-    m_type = type;
-}
-
-int Grammer::GetType()
-{
-    return m_type;
-}
-
-void Grammer::GetFirstSet()
-{
-    // for (auto production : m_productionSet)
-    for (int i = 0; i < (int)m_productionSet.size(); ++i)
-    // for (std::vector<Production>::iterator production = m_productionSet.begin(); production < m_productionSet.end(); production++)
-    {
-        // 针对产生式右部的每一个候选式 body, 求 FIRST(body)
-        for (int j = 0; j < (int)m_productionSet[i].GetRightSide().size(); ++j)
-        // for (std::vector<Body>::iterator body = production->GetRightSide().begin(); body < production->GetRightSide().end(); body++)
-        // for (auto body : production.GetRightSide())
-        {
-            // 候选式的第一个符号
-            // char X = body.GetExpression()[0];
-            // char X = (*body).GetExpression()[0];
-
-            // char X = body->GetExpression()[0];
-
-            // std::string tmp = (*body).GetExpression();
-
-            char X = m_productionSet[i].GetRightSide()[j].GetExpression()[0];
-
-            // 如果 X 是终结符
-            if (islower(X))
-            {
-                // FITRST(body) = {X}
-                // (*body).SetFirstSet(X);
-                m_productionSet[i].GetRightSide()[j].SetFirstSet(X);
-                continue;
-            }
-            // 如果 X 是非终结符
-            else
-            {
-                // DFSTraverse(*body, X);
-                DFSTraverse(m_productionSet[i].GetRightSide()[j], X);
-            }
-        }
-    }
-
-    return;
-}
-
-void Grammer::DFSTraverse(Body &originBody, char X)
-{
-    // 遍历所有产生式, 得到非终结符 X 的 FIRST
-    for (auto production : m_productionSet)
-    {
-        if (production.GetLeftSide().GetExpression()[0] == X)
-        {
-            for (auto nowBody : production.GetRightSide())
-            {
-                // 如果是非终结符
-                if (isupper(nowBody.GetExpression()[0]))
-                {
-                    // 递归
-                    DFSTraverse(originBody, nowBody.GetExpression()[0]);
-                }
-                else
-                {
-                    originBody.SetFirstSet(nowBody.GetExpression()[0]);
-                    nowBody.SetFirstSet(nowBody.GetExpression()[0]);
-                }
-            }
-        }
-        else
-        {
-            continue;
-        }
-    }
-
-    std::cout << "iterator 的地址: " << &originBody << std::endl;
-    std::cout << "类的地址: " << &this->m_productionSet[0].GetRightSide()[0] << std::endl;
-
-    return;
-}
-
+// 解析输入文本
 void Grammer::ParseText(std::string inputText)
 {
     // 向输入文本串末尾加换行符
@@ -125,11 +44,11 @@ void Grammer::ParseText(std::string inputText)
             }
 
             // 不是箭头
-            tempExpression.PushBack(inputText[i]);
+            tempExpression.SetExpression(inputText[i]);
         }
 
         inputText.erase(0, index);
-        tempProduction.SetLeftPart(tempExpression);
+        tempProduction.SetLeftSide(tempExpression);
         tempExpression.Clear();
 
         // 扫描产生式右部
@@ -138,17 +57,17 @@ void Grammer::ParseText(std::string inputText)
             // 找到一个表达式
             if (inputText[i] == '|')
             {
-                tempProduction.SetRightPart(tempExpression);
+                tempProduction.SetRightSide(tempExpression);
                 tempExpression.Clear();
                 inputText.erase(0, i + 1);
                 i = -1;
                 continue;
             }
 
-            tempExpression.PushBack(inputText[i]);
+            tempExpression.SetExpression(inputText[i]);
         }
-        // tempExpression.PushBack(inputText[0]);
-        tempProduction.SetRightPart(tempExpression);
+        // tempExpression.SetExpression(inputText[0]);
+        tempProduction.SetRightSide(tempExpression);
         // inputText.clear();
         inputText.erase(0, index + 1);
 
@@ -157,32 +76,113 @@ void Grammer::ParseText(std::string inputText)
     }
 
     m_start = m_productionSet[0].GetLeftSide();
-
-    Print();
 }
 
-void Grammer::Print()
+// 计算 FIRST 集
+void Grammer::CalcFirstSet()
 {
-    std::cout << "grammer" << std::endl;
-    std::cout << "start symbol: " << m_start.GetString() << std::endl;
-    std::cout << "production" << std::endl;
-
-    for (int i = 0; i < (int)m_productionSet.size(); ++i)
+    for (auto &production : m_productionSet)
     {
-        std::cout << "production " << i + 1 << ": ";
-        std::cout << m_productionSet[i].GetLeftSide().GetString() << " -> ";
-
-        for (int j = 0; j < (int)m_productionSet[i].GetRightSide().size(); ++j)
+        // 针对产生式右部的每一个候选式 body, 求 FIRST(body)
+        for (auto &body : production.GetRightSide())
         {
-            std::cout << m_productionSet[i].GetRightSide()[j].GetString();
-            if (j != (int)m_productionSet[i].GetRightSide().size() - 1)
+            if (body.IsTerminal())
             {
-                std::cout << " | ";
+                body.SetFirstSet(body.GetFirstCharacter());
+                continue;
             }
             else
             {
-                std::cout << std::endl;
+                DFS(body, body.GetFirstCharacter());
             }
         }
     }
+
+    return;
+}
+
+// DFS
+void Grammer::DFS(Body &originBody, char X)
+{
+    // 遍历所有产生式, 得到非终结符 X 的 FIRST
+    for (auto &production : m_productionSet)
+    {
+        if (production.GetLeftSide().GetFirstCharacter() == X)
+        {
+            for (auto &nowBody : production.GetRightSide())
+            {
+                // 如果是非终结符
+                if (isupper(nowBody.GetFirstCharacter()))
+                {
+                    // 递归
+                    DFS(originBody, nowBody.GetFirstCharacter());
+                }
+                else
+                {
+                    originBody.SetFirstSet(nowBody.GetFirstCharacter());
+                    nowBody.SetFirstSet(nowBody.GetFirstCharacter());
+                }
+            }
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    return;
+}
+
+// 获取文法类型
+int Grammer::GetType()
+{
+    return m_type;
+}
+
+// 设置文法类型
+void Grammer::SetType(int type)
+{
+    m_type = type;
+}
+
+// 打印文法
+void Grammer::Print()
+{
+    std::cout << "文法" << std::endl;
+    std::cout << "开始符号: " << m_start.GetExpression() << std::endl;
+    std::cout << "产生式" << std::endl;
+
+    for (auto production : m_productionSet)
+    {
+        std::cout << "对 "
+                  << production.GetLeftSide().GetExpression()
+                  << ": ";
+
+        for (auto body : production.GetRightSide())
+        {
+            std::cout << "FIRST("
+                      << body.GetExpression()
+                      << ")={";
+
+            // 循环打印候选式 body 的 FIRST 集
+            int length = (int)body.GetFirstSet().length();
+            for (int i = 0; i < length; ++i)
+            {
+                std::cout << body.GetFirstSet()[i];
+
+                if (i == length - 1)
+                {
+                    break;
+                }
+
+                std::cout << ", ";
+            }
+
+            std::cout << "}\t";
+        }
+
+        std::cout << std::endl;
+    }
+
+    return;
 }
