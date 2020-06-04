@@ -1,21 +1,37 @@
 #include "body.h"
 
-std::string Body::GetString()
+// 向候选式中添加数据
+void Body::SetExpression(char c)
 {
-    return m_string;
+    m_expression.push_back(c);
 }
 
-void Body::SetFirstSet(char symbol)
+// 获得候选式
+std::string Body::GetExpression()
 {
-    m_firstSet.push_back(symbol);
+    return this->m_expression;
 }
 
-void Body::PushBack(char c)
+// 向 FirstSet 中添加数据
+void Body::SetFirstSet(char c)
 {
-    m_string.push_back(c);
+    m_firstSet.push_back(c);
 }
 
+// 获取 FirstSet
+std::string Body::GetFirstSet()
+{
+    return m_firstSet;
+}
+
+// 清空候选式
 void Body::Clear()
 {
-    m_string.clear();
+    m_expression.clear();
+}
+
+// 候选式首符是否为终结符
+bool Body::IsTerminal()
+{
+    return islower(m_expression[0]);
 }

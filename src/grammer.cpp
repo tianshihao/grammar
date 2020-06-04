@@ -1,4 +1,4 @@
-﻿#include "grammer.h"
+#include "grammer.h"
 
 Grammer::Grammer()
 {
@@ -23,25 +23,38 @@ int Grammer::GetType()
 
 void Grammer::GetFirstSet()
 {
-    for (auto production : m_productionSet)
+    // for (auto production : m_productionSet)
+    for (int i = 0; i < (int)m_productionSet.size(); ++i)
+    // for (std::vector<Production>::iterator production = m_productionSet.begin(); production < m_productionSet.end(); production++)
     {
         // 针对产生式右部的每一个候选式 body, 求 FIRST(body)
-        for (auto body : production.GetRightSide())
+        for (int j = 0; j < (int)m_productionSet[i].GetRightSide().size(); ++j)
+        // for (std::vector<Body>::iterator body = production->GetRightSide().begin(); body < production->GetRightSide().end(); body++)
+        // for (auto body : production.GetRightSide())
         {
             // 候选式的第一个符号
-            char X = body.GetString()[0];
+            // char X = body.GetExpression()[0];
+            // char X = (*body).GetExpression()[0];
+
+            // char X = body->GetExpression()[0];
+
+            // std::string tmp = (*body).GetExpression();
+
+            char X = m_productionSet[i].GetRightSide()[j].GetExpression()[0];
 
             // 如果 X 是终结符
             if (islower(X))
             {
                 // FITRST(body) = {X}
-                body.SetFirstSet(X);
+                // (*body).SetFirstSet(X);
+                m_productionSet[i].GetRightSide()[j].SetFirstSet(X);
                 continue;
             }
             // 如果 X 是非终结符
             else
             {
-                DFSTraverse(body, X);
+                // DFSTraverse(*body, X);
+                DFSTraverse(m_productionSet[i].GetRightSide()[j], X);
             }
         }
     }
@@ -54,20 +67,20 @@ void Grammer::DFSTraverse(Body &originBody, char X)
     // 遍历所有产生式, 得到非终结符 X 的 FIRST
     for (auto production : m_productionSet)
     {
-        if (production.GetLeftSide().GetString()[0] == X)
+        if (production.GetLeftSide().GetExpression()[0] == X)
         {
             for (auto nowBody : production.GetRightSide())
             {
                 // 如果是非终结符
-                if (isupper(nowBody.GetString()[0]))
+                if (isupper(nowBody.GetExpression()[0]))
                 {
                     // 递归
-                    DFSTraverse(originBody, nowBody.GetString()[0]);
+                    DFSTraverse(originBody, nowBody.GetExpression()[0]);
                 }
                 else
                 {
-                    originBody.SetFirstSet(nowBody.GetString()[0]);
-                    nowBody.SetFirstSet(nowBody.GetString()[0]);
+                    originBody.SetFirstSet(nowBody.GetExpression()[0]);
+                    nowBody.SetFirstSet(nowBody.GetExpression()[0]);
                 }
             }
         }
@@ -76,6 +89,9 @@ void Grammer::DFSTraverse(Body &originBody, char X)
             continue;
         }
     }
+
+    std::cout << "iterator 的地址: " << &originBody << std::endl;
+    std::cout << "类的地址: " << &this->m_productionSet[0].GetRightSide()[0] << std::endl;
 
     return;
 }

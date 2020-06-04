@@ -1,21 +1,25 @@
 #include "production.h"
 
+// 设置产生式左部数据
+void Production::SetLeftSide(Body leftSide)
+{
+    m_leftSide = leftSide;
+}
+
+// 获取产生式左部数据
 Body Production::GetLeftSide()
 {
     return m_leftSide;
 }
 
+// 向产生式右部添加候选式
+void Production::SetRightSide(Body rightSide)
+{
+    m_rightSide.push_back(rightSide);
+}
+
+// 获取产生式右部的候选式向量
 std::vector<Body> Production::GetRightSide()
 {
     return m_rightSide;
-}
-
-void Production::SetLeftPart(Body e)
-{
-    m_leftSide = e;
-}
-
-void Production::SetRightPart(Body e)
-{
-    m_rightSide.push_back(e);
 }
