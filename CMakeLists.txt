@@ -18,6 +18,9 @@ set(SOURCES
 # 头文件
 set(HEADERS
     include/mainwindow.h
+    include/body.h
+    include/production.h
+    include/grammer.h
 )
 
 # add_executable() 须放在 target_link_libraries() 之前
