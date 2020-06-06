@@ -36,7 +36,7 @@ void Grammer::ParseText(std::string inputText)
                 // 防止越界
                 if ((i + 1) <= (int)inputText.length() - 1)
                 {
-                    if (inputText[i + i] == '>')
+                    if (inputText[i + 1] == '>')
                     {
                         index = i + 1 + 1;
                         break;
@@ -49,7 +49,6 @@ void Grammer::ParseText(std::string inputText)
         }
 
         inputText.erase(0, index);
-        // 值传递, 调用复制构造函数
         tempProduction.SetLeftSide(tempBody);
         tempBody.Clear();
 
@@ -59,7 +58,6 @@ void Grammer::ParseText(std::string inputText)
             // 找到一个表达式
             if (inputText[i] == '|')
             {
-                // 值传递, 调用复制构造函数
                 tempProduction.SetRightSide(tempBody);
                 tempBody.Clear();
                 inputText.erase(0, i + 1);
@@ -69,7 +67,6 @@ void Grammer::ParseText(std::string inputText)
 
             tempBody.SetExpression(inputText[i]);
         }
-        // 值传递, 调用复制构造函数
         tempProduction.SetRightSide(tempBody);
         inputText.erase(0, index + 1);
 
@@ -90,12 +87,12 @@ void Grammer::CalcFirstSet()
         {
             if (body.IsTerminal())
             {
-                body.SetFirstSet(body.GetFirstCharacter());
+                body.SetFirstSet(body.GetFirstSymbol());
                 continue;
             }
             else
             {
-                DFS(body, body.GetFirstCharacter());
+                DFS(body, body.GetFirstSymbol());
             }
         }
     }
@@ -104,25 +101,25 @@ void Grammer::CalcFirstSet()
 }
 
 // DFS
-void Grammer::DFS(Body &originBody, char X)
+void Grammer::DFS(Body &originBody, std::string firstSymbol)
 {
-    // 遍历所有产生式, 得到非终结符 X 的 FIRST
+    // 遍历所有产生式, 得到非终结符 firstSymbol 的 FIRST
     for (auto &production : m_productionSet)
     {
-        if (production.GetLeftSide().GetFirstCharacter() == X)
+        if (production.GetLeftSide().GetFirstSymbol() == firstSymbol)
         {
             for (auto &nowBody : std::move(production.GetRightSide()))
             {
                 // 如果是非终结符
-                if (isupper(nowBody.GetFirstCharacter()))
+                if (isupper(nowBody.GetFirstSymbol()[0]))
                 {
                     // 递归
-                    DFS(originBody, nowBody.GetFirstCharacter());
+                    DFS(originBody, nowBody.GetFirstSymbol());
                 }
                 else
                 {
-                    originBody.SetFirstSet(nowBody.GetFirstCharacter());
-                    nowBody.SetFirstSet(nowBody.GetFirstCharacter());
+                    originBody.SetFirstSet(nowBody.GetFirstSymbol());
+                    nowBody.SetFirstSet(nowBody.GetFirstSymbol());
                 }
             }
         }
@@ -158,9 +155,8 @@ void Grammer::Print()
     {
         std::cout << "For "
                   << production.GetLeftSide().GetExpression()
-                  << ": ";
+                  << ": \t";
 
-        // 值传递, 调用复制构造函数
         for (auto body : production.GetRightSide())
         {
             std::cout << "FIRST("

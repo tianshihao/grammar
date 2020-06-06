@@ -35,7 +35,7 @@ public:
     // 计算 FIRST 集
     void CalcFirstSet();
     // DFS
-    void DFS(Body &, char);
+    void DFS(Body &originBody, std::string firstSymbol);
     // 计算 FOLLOW 集
     void CalcFollowSet();
     // 获取文法类型

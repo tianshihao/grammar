@@ -13,27 +13,52 @@ void Body::SetExpression(char c)
 }
 
 // 获取 FirstSet
-std::set<char> Body::GetFirstSet()
+std::set<std::string> Body::GetFirstSet()
 {
     return m_firstSet;
 }
 
 // 向 FirstSet 中添加数据
-void Body::SetFirstSet(char c)
+void Body::SetFirstSet(std::string s)
 {
-    m_firstSet.insert(c);
+    m_firstSet.insert(s);
 }
 
 // 获取候选式首符
-char Body::GetFirstCharacter()
+std::string Body::GetFirstSymbol()
 {
-    return m_expression[0];
+    // return m_expression[0];
+    if (m_expression.length() >= 2)
+    {
+        if (m_expression[1] == 39)
+        {
+            return std::string(m_expression, 0, 2);
+        }
+        else
+        {
+            return std::string(m_expression, 0, 1);
+        }
+    }
+    else
+    {
+        return std::string(m_expression, 0, 1);
+    }
+
+    return std::string();
 }
 
 // 候选式首符是否为终结符
 bool Body::IsTerminal()
 {
-    return islower(m_expression[0]);
+    // return islower(m_expression[0]);
+    if (isupper(m_expression[0]))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 // 清空候选式
