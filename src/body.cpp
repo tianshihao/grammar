@@ -13,15 +13,15 @@ void Body::SetExpression(char ch)
 }
 
 // 获取 FirstSet
-std::set<char> Body::GetFirstSet()
+std::set<std::string> Body::GetFirstSet()
 {
     return m_firstSet;
 }
 
 // 向 FirstSet 中添加数据
-void Body::SetFirstSet(char vt)
+void Body::SetFirstSet(std::string symbol)
 {
-    m_firstSet.insert(vt);
+    m_firstSet.insert(symbol);
 }
 
 // 获取候选式首符
@@ -53,10 +53,12 @@ bool Body::IsTerminal()
     // return islower(m_expression[0]);
     if (isupper(m_expression[0]))
     {
+        std::cout << m_expression[0] << " is not terminal\n";
         return false;
     }
     else
     {
+        std::cout << m_expression[0] << " is terminal\n";
         return true;
     }
 }

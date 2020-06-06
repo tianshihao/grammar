@@ -91,7 +91,7 @@ void Grammer::CalcFirstSet()
         {
             if (body.IsTerminal())
             {
-                body.SetFirstSet(body.GetFirstSymbol().c_str()[0]);
+                body.SetFirstSet(body.GetFirstSymbol());
                 continue;
             }
             else
