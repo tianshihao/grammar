@@ -76,6 +76,33 @@ void Grammer::ParseText(std::string inputText)
     m_start = m_productionSet[0].GetLeftSide();
 }
 
+bool Grammer::MergeProduction()
+{
+    // 标志位
+    bool bMerged = false;
+
+    for (int i = 0; i < (int)m_productionSet.size(); ++i)
+    {
+        for (int j = i + 1; j < (int)m_productionSet.size(); ++j)
+        {
+            // 第 j 个产生式的左部等于第 i 个产生式的左部, 合并
+            if (m_productionSet[j].GetLeftSide().GetExpression() == m_productionSet[i].GetLeftSide().GetExpression())
+            {
+                bMerged = true;
+                for (int k = 0; k < (int)m_productionSet[j].GetRightSide().size(); ++k)
+                {
+                    m_productionSet[i].SetRightSide(m_productionSet[j].GetRightSide()[k]);
+                }
+
+                // 合并之后删除产生式 m_prodectionSet[j]
+                m_productionSet.erase(m_productionSet.begin() + j);
+            }
+        }
+    }
+
+    return bMerged;
+}
+
 // 计算 FIRST 集
 void Grammer::CalcFirstSet()
 {
