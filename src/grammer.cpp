@@ -168,17 +168,22 @@ void Grammer::Print()
                       << ")={";
 
             // 循环打印候选式 body 的 FIRST 集
-            int length = (int)body.GetFirstSet().length();
-            for (int i = 0; i < length; ++i)
+            // int length = (int)body.GetFirstSet().size();
+            // for (int i = 0; i < length; ++i)
+            // {
+            //     std::cout << body.GetFirstSet()[i];
+
+            //     if (i == length - 1)
+            //     {
+            //         break;
+            //     }
+
+            //     std::cout << ", ";
+            // }
+
+            for (auto ch : body.GetFirstSet())
             {
-                std::cout << body.GetFirstSet()[i];
-
-                if (i == length - 1)
-                {
-                    break;
-                }
-
-                std::cout << ", ";
+                std::cout << " " << ch << " ";
             }
 
             std::cout << "}\t";

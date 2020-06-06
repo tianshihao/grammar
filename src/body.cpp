@@ -13,7 +13,7 @@ void Body::SetExpression(char c)
 }
 
 // 获取 FirstSet
-std::string Body::GetFirstSet()
+std::set<char> Body::GetFirstSet()
 {
     return m_firstSet;
 }
@@ -21,7 +21,7 @@ std::string Body::GetFirstSet()
 // 向 FirstSet 中添加数据
 void Body::SetFirstSet(char c)
 {
-    m_firstSet.push_back(c);
+    m_firstSet.insert(c);
 }
 
 // 获取候选式首符

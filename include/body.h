@@ -2,6 +2,7 @@
 #define BODY_H
 
 #include <iostream>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
@@ -14,7 +15,8 @@ private:
     // 候选式
     std::string m_expression;
     // 候选式 FIRST 集
-    std::string m_firstSet;
+    // std::string m_firstSet;
+    std::set<char> m_firstSet;
 
 public:
     // 获得候选式
@@ -22,7 +24,7 @@ public:
     // 向候选式中添加数据
     void SetExpression(char c);
     // 获取 FirstSet
-    std::string GetFirstSet();
+    std::set<char> GetFirstSet();
     // 向 FirstSet 中添加数据
     void SetFirstSet(char c);
     // 获取候选式首符
