@@ -1,4 +1,4 @@
-﻿#ifndef BODY_H
+#ifndef BODY_H
 #define BODY_H
 
 #include <iostream>
@@ -17,15 +17,6 @@ private:
     std::string m_firstSet;
 
 public:
-    // 获得候选式
-    std::string GetExpression();
-    // 向候选式中添加数据
-    void SetExpression(char c);
-    // 获取 FirstSet
-    std::string GetFirstSet();
-    // 向 FirstSet 中添加数据
-    void SetFirstSet(char c);
-    // 获取候选式首符
     char GetFirstCharacter();
     // 候选式首符是否为终结符
     bool IsTerminal();
