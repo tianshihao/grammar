@@ -17,7 +17,6 @@ void Production::SetLeftSide(Body leftSide)
 // 获取产生式右部的候选式向量
 std::vector<Body> &Production::GetRightSide()
 {
-    // return std::move(m_rightSide);
     return m_rightSide;
 }
 
