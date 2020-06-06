@@ -3,6 +3,7 @@
 // 获取产生式左部数据
 Body Production::GetLeftSide()
 {
+    // 值传递, 调用复制构造函数
     return m_leftSide;
 }
 
@@ -10,11 +11,13 @@ Body Production::GetLeftSide()
 void Production::SetLeftSide(Body leftSide)
 {
     m_leftSide = leftSide;
+    // m_leftSide(leftSide);
 }
 
 // 获取产生式右部的候选式向量
-std::vector<Body> Production::GetRightSide()
+std::vector<Body> &Production::GetRightSide()
 {
+    // return std::move(m_rightSide);
     return m_rightSide;
 }
 

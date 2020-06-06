@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 // 候选式
@@ -16,6 +17,15 @@ private:
     std::string m_firstSet;
 
 public:
+    // Body();
+    // // 复制构造函数
+    // Body(const Body &body);
+    // // 移动构造函数
+    // Body(Body &&body);
+    // // 运算符重载, 左值
+    // void operator=(const Body &body);
+    // // 运算符重载, 右值
+    // void operator=(Body &&body);
     // 获得候选式
     std::string GetExpression();
     // 向候选式中添加数据
@@ -32,4 +42,4 @@ public:
     void Clear();
 };
 
-#endif // BODY
+#endif // BODY_H

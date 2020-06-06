@@ -19,7 +19,7 @@ public:
     // 设置产生式左部数据
     void SetLeftSide(Body leftSide);
     // 获取产生式右部的候选式向量
-    std::vector<Body> GetRightSide();
+    std::vector<Body> &GetRightSide();
     // 向产生式右部添加候选式
     void SetRightSide(Body rightSide);
 };
