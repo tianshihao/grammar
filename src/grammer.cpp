@@ -162,30 +162,30 @@ void Grammer::Print()
 
         for (auto body : production.GetRightSide())
         {
+            auto body = production.GetLeftSide();
+            std::cout << "FIRST("
+                      << body.GetExpression()
+                      << ")={";
+            for (auto symbol : body.GetFirstSet())
+            {
+                std::cout << " " << symbol << " ";
+            }
+
+            std::cout << "}\t";
+        }
+
+        for (auto body : production.GetRightSide())
+        {
             std::cout << "FIRST("
                       << body.GetExpression()
                       << ")={";
 
-            // 循环打印候选式 body 的 FIRST 集
-            // int length = (int)body.GetFirstSet().size();
-            // for (int i = 0; i < length; ++i)
-            // {
-            //     std::cout << body.GetFirstSet()[i];
-
-            //     if (i == length - 1)
-            //     {
-            //         break;
-            //     }
-
-            //     std::cout << ", ";
-            // }
-
-            for (auto ch : body.GetFirstSet())
+            for (auto symbol : body.GetFirstSet())
             {
-                std::cout << " " << ch << " ";
+                std::cout << " " << symbol << " ";
             }
 
-            std::cout << "}\t";
+            std::cout << "}\t\t";
         }
 
         std::cout << std::endl;

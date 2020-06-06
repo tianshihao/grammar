@@ -30,11 +30,17 @@ std::string Body::GetFirstSymbol()
     // return m_expression[0];
     if (m_expression.length() >= 2)
     {
+        // 如果首符是 A' 式非终结符
         if (m_expression[1] == 39)
         {
             return std::string(m_expression, 0, 2);
         }
-        else
+        // 如果首符是 ε, 长度为两个字节
+        else if ((m_expression[0] == -50) && (m_expression[1] == -75))
+        {
+            return std::string(m_expression, 0, 2);
+        }
+        // 首符可以用 ASCII 表示, 长度为一个字节 else
         {
             return std::string(m_expression, 0, 1);
         }
@@ -53,12 +59,10 @@ bool Body::IsTerminal()
     // return islower(m_expression[0]);
     if (isupper(m_expression[0]))
     {
-        std::cout << m_expression[0] << " is not terminal\n";
         return false;
     }
     else
     {
-        std::cout << m_expression[0] << " is terminal\n";
         return true;
     }
 }
