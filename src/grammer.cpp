@@ -114,16 +114,15 @@ void Grammer::DFS(Body &originBody, std::string firstSymbol)
         {
             for (auto &nowBody : production.GetRightSide())
             {
-                // 如果是非终结符
-                if (isupper(nowBody.GetFirstSymbol()[0]))
-                {
-                    // 递归
-                    DFS(originBody, nowBody.GetFirstSymbol());
-                }
-                else
+                // 如果是非终结符, 添加到 FIRST 集
+                if (nowBody.IsTerminal())
                 {
                     originBody.SetFirstSet(nowBody.GetFirstSymbol().c_str()[0]);
                     nowBody.SetFirstSet(nowBody.GetFirstSymbol().c_str()[0]);
+                }
+                else
+                {
+                    DFS(originBody, nowBody.GetFirstSymbol());
                 }
             }
         }
