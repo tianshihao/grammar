@@ -1,4 +1,4 @@
-﻿#include "grammer.h"
+#include "grammer.h"
 
 // 构造函数
 Grammer::Grammer()
@@ -81,6 +81,11 @@ void Grammer::CalcFirstSet()
 {
     for (auto &production : m_productionSet)
     {
+        // 求解 FOLLOW 集时要用到产生式左部非终结符的 FIRST 集
+        {
+            auto &body = production.GetLeftSide();
+            DFS(body, body.GetFirstSymbol());
+        }
         // 针对产生式右部的每一个候选式 body, 求 FIRST(body)
         for (auto &body : production.GetRightSide())
         {
