@@ -59,7 +59,6 @@ void Grammer::ParseText(std::string inputText)
             // 找到一个表达式
             if (inputText[i] == '|')
             {
-                // tempBody.SetFirstSet('p');
                 // 值传递, 调用复制构造函数
                 tempProduction.SetRightSide(tempBody);
                 tempBody.Clear();
@@ -70,8 +69,6 @@ void Grammer::ParseText(std::string inputText)
 
             tempBody.SetExpression(inputText[i]);
         }
-        // tempBody.SetExpression(inputText[0]);
-        // tempBody.SetFirstSet('p');
         // 值传递, 调用复制构造函数
         tempProduction.SetRightSide(tempBody);
         inputText.erase(0, index + 1);
