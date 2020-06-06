@@ -3,25 +3,25 @@
 // 获得候选式
 std::string Body::GetExpression()
 {
-    return std::move(m_expression);
+    return m_expression;
 }
 
 // 向候选式中添加数据
-void Body::SetExpression(char c)
+void Body::SetExpression(char ch)
 {
-    m_expression.push_back(c);
+    m_expression.push_back(ch);
 }
 
 // 获取 FirstSet
-std::set<std::string> Body::GetFirstSet()
+std::set<char> Body::GetFirstSet()
 {
     return m_firstSet;
 }
 
 // 向 FirstSet 中添加数据
-void Body::SetFirstSet(std::string s)
+void Body::SetFirstSet(char vt)
 {
-    m_firstSet.insert(s);
+    m_firstSet.insert(vt);
 }
 
 // 获取候选式首符
@@ -66,4 +66,5 @@ void Body::Clear()
 {
     m_expression.clear();
     m_firstSet.clear();
+    m_followSet.clear();
 }

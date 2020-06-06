@@ -10,7 +10,6 @@
 #include <vector>
 
 // 文法
-
 class Grammer
 {
 private:

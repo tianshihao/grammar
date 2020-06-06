@@ -1,5 +1,4 @@
 ﻿#include "grammer.h"
-#include <utility>
 
 // 构造函数
 Grammer::Grammer()
@@ -87,7 +86,7 @@ void Grammer::CalcFirstSet()
         {
             if (body.IsTerminal())
             {
-                body.SetFirstSet(body.GetFirstSymbol());
+                body.SetFirstSet(body.GetFirstSymbol().c_str()[0]);
                 continue;
             }
             else
@@ -108,7 +107,7 @@ void Grammer::DFS(Body &originBody, std::string firstSymbol)
     {
         if (production.GetLeftSide().GetFirstSymbol() == firstSymbol)
         {
-            for (auto &nowBody : std::move(production.GetRightSide()))
+            for (auto &nowBody : production.GetRightSide())
             {
                 // 如果是非终结符
                 if (isupper(nowBody.GetFirstSymbol()[0]))
@@ -118,8 +117,8 @@ void Grammer::DFS(Body &originBody, std::string firstSymbol)
                 }
                 else
                 {
-                    originBody.SetFirstSet(nowBody.GetFirstSymbol());
-                    nowBody.SetFirstSet(nowBody.GetFirstSymbol());
+                    originBody.SetFirstSet(nowBody.GetFirstSymbol().c_str()[0]);
+                    nowBody.SetFirstSet(nowBody.GetFirstSymbol().c_str()[0]);
                 }
             }
         }
