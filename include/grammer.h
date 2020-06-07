@@ -10,7 +10,6 @@
 #include <vector>
 
 // 文法
-
 class Grammer
 {
 private:
@@ -32,12 +31,18 @@ public:
     Grammer(std::string inputText);
     // 解析输入文本
     void ParseText(std::string inputText);
+    // 合并相同左部的产生式
+    bool MergeProduction();
     // 计算 FIRST 集
     void CalcFirstSet();
     // DFS
     void DFS(Body &originBody, std::string firstSymbol);
     // 计算 FOLLOW 集
     void CalcFollowSet();
+    // 返回给定的非终结符在产生式左部中所属的 Body
+    Body FindLeftBody(std::string body);
+    // 返回给定的非终结符在产生式左部中所属的 Body &
+    Body &FindLeftBody(std::string body, bool bRefs);
     // 获取文法类型
     int GetType();
     // 设置文法类型

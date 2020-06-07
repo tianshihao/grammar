@@ -3,13 +3,13 @@
 // 获得候选式
 std::string Body::GetExpression()
 {
-    return std::move(m_expression);
+    return m_expression;
 }
 
 // 向候选式中添加数据
-void Body::SetExpression(char c)
+void Body::SetExpression(char ch)
 {
-    m_expression.push_back(c);
+    m_expression.push_back(ch);
 }
 
 // 获取 FirstSet
@@ -19,9 +19,35 @@ std::set<std::string> Body::GetFirstSet()
 }
 
 // 向 FirstSet 中添加数据
-void Body::SetFirstSet(std::string s)
+void Body::SetFirstSet(std::string symbol)
 {
-    m_firstSet.insert(s);
+    m_firstSet.insert(symbol);
+}
+
+// 获得非终结符的 FOLLOW 集
+std::set<std::string> Body::GetFollowSet()
+{
+    return m_followSet;
+}
+
+std::set<std::string> &Body::GetFollowSet(bool bRefs)
+{
+    return m_followSet;
+}
+
+// 向非终结符的 FOLLOW 集中添加终结符
+void Body::SetFollowSet(const std::string &symbol)
+{
+    m_followSet.insert(symbol);
+}
+
+void Body::MergeFollowSet(std::set<std::string> set)
+{
+    // m_followSet.merge(set);
+    for (auto str : set)
+    {
+        m_followSet.insert(str);
+    }
 }
 
 // 获取候选式首符
@@ -30,11 +56,17 @@ std::string Body::GetFirstSymbol()
     // return m_expression[0];
     if (m_expression.length() >= 2)
     {
+        // 如果首符是 A' 式非终结符
         if (m_expression[1] == 39)
         {
             return std::string(m_expression, 0, 2);
         }
-        else
+        // 如果首符是 ε, 长度为两个字节
+        else if ((m_expression[0] == -50) && (m_expression[1] == -75))
+        {
+            return std::string(m_expression, 0, 2);
+        }
+        // 首符可以用 ASCII 表示, 长度为一个字节 else
         {
             return std::string(m_expression, 0, 1);
         }
@@ -66,4 +98,5 @@ void Body::Clear()
 {
     m_expression.clear();
     m_firstSet.clear();
+    m_followSet.clear();
 }

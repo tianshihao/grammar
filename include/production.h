@@ -15,7 +15,7 @@ private:
 
 public:
     // 获取产生式左部数据
-    Body GetLeftSide();
+    Body &GetLeftSide();
     // 设置产生式左部数据
     void SetLeftSide(Body leftSide);
     // 获取产生式右部的候选式向量

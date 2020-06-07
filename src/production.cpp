@@ -1,7 +1,7 @@
 #include "production.h"
 
 // 获取产生式左部数据
-Body Production::GetLeftSide()
+Body &Production::GetLeftSide()
 {
     // 值传递, 调用复制构造函数
     return m_leftSide;
