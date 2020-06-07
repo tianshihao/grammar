@@ -18,6 +18,7 @@ private:
     std::set<std::string> m_followSet;
 
 public:
+    Body() {}
     // 获得候选式
     std::string GetExpression();
 
@@ -33,8 +34,14 @@ public:
     // 获得非终结符的 FOLLOW 集
     std::set<std::string> GetFollowSet();
 
+    // 获得非终结符的 FOLLOW 集的引用
+    std::set<std::string> &GetFollowSet(bool bRefs);
+
     // 向非终结符的 FOLLOW 集中添加终结符
-    void SetFollowSet(std::string symbol);
+    void SetFollowSet(const std::string &symbol);
+
+    // 将另一个产生式的 FIRST 集或 FOLLOW 集合并到 FOLLOW 集
+    void MergeFollowSet(std::set<std::string> set);
 
     // 获取候选式首符
     std::string GetFirstSymbol();

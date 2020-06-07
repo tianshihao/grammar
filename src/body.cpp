@@ -24,6 +24,32 @@ void Body::SetFirstSet(std::string symbol)
     m_firstSet.insert(symbol);
 }
 
+// 获得非终结符的 FOLLOW 集
+std::set<std::string> Body::GetFollowSet()
+{
+    return m_followSet;
+}
+
+std::set<std::string> &Body::GetFollowSet(bool bRefs)
+{
+    return m_followSet;
+}
+
+// 向非终结符的 FOLLOW 集中添加终结符
+void Body::SetFollowSet(const std::string &symbol)
+{
+    m_followSet.insert(symbol);
+}
+
+void Body::MergeFollowSet(std::set<std::string> set)
+{
+    // m_followSet.merge(set);
+    for (auto str : set)
+    {
+        m_followSet.insert(str);
+    }
+}
+
 // 获取候选式首符
 std::string Body::GetFirstSymbol()
 {
