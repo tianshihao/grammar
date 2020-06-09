@@ -189,6 +189,7 @@ void Grammer::CalcFollowSet()
             for (int i = 0; i < (int)rightBody.length(); ++i)
             {
                 // 候选式子中的非终结符 VN1, 找到了!
+                // todo 增加对 A' 式终结符的支持
                 if (isupper(rightBody[i]))
                 {
                     // 该非终结符存在后继 V
@@ -199,7 +200,7 @@ void Grammer::CalcFollowSet()
                         {
                             // 在产生式左部中找到该非终结符 VN2 所属的 Body
                             Body VN2Body = FindLeftBody(std::string(rightBody, i + 1, i + 2));
-                            // 在产生式左部中找到非终结符 VN1 所属的 Body
+                            // 在产生式左部中找到非终结符 VN1 所属的 Body&
                             Body &VN1Body = FindLeftBody(std::string(rightBody, i, i + 1), true);
                             // 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
                             VN1Body.MergeFollowSet(VN2Body.GetFirstSet());
@@ -247,7 +248,7 @@ void Grammer::CalcFollowSet()
                             // 如果 ε∈FIRST(VN2), 则将 FOLLOW(leftBody) 加入 FOLLOW(VN1)
                             if (1)
                             {
-                                // 在产生式左部中找到非终结符 VN1 所属的 Body
+                                // 在产生式左部中找到非终结符 VN1 所属的 Body&
                                 Body &VN1Body = FindLeftBody(std::string(rightBody, i, i + 1), true);
                                 VN1Body.MergeFollowSet(leftBody.GetFollowSet());
                             }
