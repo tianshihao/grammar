@@ -176,10 +176,10 @@ void Grammer::CalcFollowSet()
     {
         // 因为 ε 占两个字节, 所以需要特殊处理
         // 候选式长度为 2 有以下可能:
-        // 1. 空串 ε: 什么也不做
-        // 2. VN1+VN2+: 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
-        // 3. VN+VT+: 继续循环
-        // 3. VT+V+ : 继续循环
+        // 1) ε: 继续循环
+        // 2) VN1+VN2: 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
+        // 3) VN+VT: 继续循环
+        // 4) VT+V: 继续循环
 
         auto leftBody = production.GetLeftSide();
 
@@ -188,31 +188,36 @@ void Grammer::CalcFollowSet()
             std::string rightBody = rightSide.GetExpression();
             for (int i = 0; i < (int)rightBody.length(); ++i)
             {
-                // 候选式子中的非终结符 VN1, 找到了!
-                // todo 增加对 A' 式终结符的支持
-                if (isupper(rightBody[i]))
+                int VN1Length = MagicFunction(rightBody, i);
+
+                if (VN1Length > 0)
                 {
-                    // 该非终结符存在后继 V
-                    if ((i + 1) < (int)rightBody.length())
+
+                    int VN2Length = MagicFunction(rightBody, i + VN1Length);
+
+                    // * 2) VN1+VN2: 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
+                    if (VN2Length > 0)
                     {
-                        // 并且 V 也是非终结符, 即 VN2
-                        if (isupper(rightBody[i + 1]))
-                        {
-                            // 在产生式左部中找到该非终结符 VN2 所属的 Body
-                            Body VN2Body = FindLeftBody(std::string(rightBody, i + 1, i + 2));
-                            // 在产生式左部中找到非终结符 VN1 所属的 Body&
-                            Body &VN1Body = FindLeftBody(std::string(rightBody, i, i + 1), true);
-                            // 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
-                            VN1Body.MergeFollowSet(VN2Body.GetFirstSet());
-                        }
+                        // 在产生式左部中找到非终结符 VN1 所属的 Body&
+                        Body &VN1Body = FindLeftBody(std::string(rightBody, i, VN1Length), true);
+
+                        // 在产生式左部中找到非终结符 VN2 所属的 Body
+                        Body VN2Body = FindLeftBody(std::string(rightBody, i + VN1Length, VN2Length));
+
+                        // 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
+                        VN1Body.MergeFollowSet(VN2Body.GetFirstSet());
+                    }
+                    // * 3) VN+VT: 继续循环
+                    else
+                    {
+                        continue;
                     }
                 }
-                // 如果是终结符, 则将其本身加入到非终结符的 FOLLOW 集中
+                // * 1) ε: 继续循环
+                // * 4) VT+V: 继续循环
                 else
                 {
-                    // std::set<std::string> tempFirstSet;
-                    // tempFirstSet.insert(std::string(rightBody, i, i + 1));
-                    // leftBody.MergeFollowSet(tempFirstSet);
+                    continue;
                 }
             }
         }
@@ -222,11 +227,11 @@ void Grammer::CalcFollowSet()
     // 则 FOLLOW(B) 中的全部元素属于 FOLLOW(A)
     for (auto &production : m_productionSet)
     {
-        // 1. 空串ε: 什么也不做
-        // 2. VN1+VN2: 判断是否ε∈FIRST(VN2), 若是, 则将 FOLLOW(leftBody) 加入 FOLLOW(VN1)
-        // 3. VN: 将 FOLLOW(leftBody) 加入 FOLLOW(VN)
-        // 4. VN+VT: 什么也不做
-        // 5. VT+V: 什么也不做
+        // 1) ε: 继续循环
+        // 2) VN1+VN2: 判断是否ε∈FIRST(VN2), 若是, 则将 FOLLOW(leftBody) 加入 FOLLOW(VN1)
+        // 3) VN: 将 FOLLOW(leftBody) 加入 FOLLOW(VN)
+        // 4) VN+VT: 继续循环
+        // 5) VT+(*): 继续循环
         auto leftBody = production.GetLeftSide();
 
         for (auto rightSide : production.GetRightSide())
@@ -234,32 +239,56 @@ void Grammer::CalcFollowSet()
             std::string rightBody = rightSide.GetExpression();
             for (int i = 0; i < (int)rightBody.length(); ++i)
             {
-                // 候选式子中的非终结符 VN1, 找到了!
-                if (isupper(rightBody[i]))
+                int VN1Length = MagicFunction(rightBody, i);
+
+                if (VN1Length > 0)
                 {
-                    // 该非终结符存在后继 V
-                    if ((i + 1) < (int)rightBody.length())
+                    int VN2Length = MagicFunction(rightBody, i + VN1Length);
+
+                    if (VN2Length > 0)
                     {
-                        // 并且 V 也是非终结符, 即VN2
-                        if (isupper(rightBody[i + 1]))
+                        // 在产生式左部找到非终结符 VN2 所属的 Body
+                        Body VN2Body = FindLeftBody(std::string(rightBody, i + VN1Length, VN2Length));
+
+                        std::string nullString = "ε";
+                        std::set<std::string>::iterator it = VN2Body.GetFirstSet().find(nullString);
+
+                        // * 2) VN1+VN2: 判断是否ε∈FIRST(VN2), 若是, 则将 FOLLOW(leftBody) 加入 FOLLOW(VN1)
+                        // 如果 ε∈FIRST(VN2)
+                        // ? 这样能判断出来吗?
+                        if (it != VN2Body.GetFirstSet().end())
                         {
-                            // 在产生式左部中找到该非终结符 VN2 所属的 Body
-                            Body VN2Body = FindLeftBody(std::string(rightBody, i + 1, i + 2));
-                            // 如果 ε∈FIRST(VN2), 则将 FOLLOW(leftBody) 加入 FOLLOW(VN1)
-                            if (1)
-                            {
-                                // 在产生式左部中找到非终结符 VN1 所属的 Body&
-                                Body &VN1Body = FindLeftBody(std::string(rightBody, i, i + 1), true);
-                                VN1Body.MergeFollowSet(leftBody.GetFollowSet());
-                            }
+                            // 在产生式左部中找到非终结符 VN1 所属的 Body&
+                            Body &VN1Body = FindLeftBody(std::string(rightBody, i, VN1Length), true);
+                            // 将 FOLLOW(leftBody) 中的元素加入到 FOLLOW(VN1) 中
+                            VN1Body.MergeFollowSet(leftBody.GetFollowSet());
                         }
                     }
-                    // VN1 没有后继了! 将 FOLLOW 中的元素加入 FOLLOW(VN1)
+                    // VN1 后可能是终结符, 也可能 VN1 没有后继, 是最后一个元素
                     else
                     {
-                        Body &VN1Body = FindLeftBody(std::string(rightBody, i, i + 1), true);
-                        VN1Body.MergeFollowSet(leftBody.GetFollowSet());
+                        // 判断 VN1 是不是最后一个元素
+                        // * 3) VN: 将 FOLLOW(leftBody) 加入 FOLLOW(VN)
+                        if ((i + VN1Length) >= (int)rightBody.length())
+                        {
+                            // 如果是, 则将 FOLLOW(leftBody) 加入到 FOLLOW(VN1)
+                            // 在产生式左部中找到非终结符 VN1 所属的 Body&
+                            Body &VN1Body = FindLeftBody(std::string(rightBody, i, VN1Length), true);
+                            // 将 FOLLOW(leftBody) 中的元素加入到 FOLLOW(VN1) 中
+                            VN1Body.MergeFollowSet(leftBody.GetFollowSet());
+                        }
+                        // * 4) VN+VT: 继续循环
+                        else
+                        {
+                            continue;
+                        }
                     }
+                }
+                // * 1) 空串ε: 继续循环
+                // * 5) VT+(*): 继续循环
+                else
+                {
+                    continue;
                 }
             }
         }
@@ -274,6 +303,32 @@ void Grammer::CalcFollowSet()
     }
 
     return;
+}
+
+int Grammer::MagicFunction(std::string str, int index)
+{
+    // A' 式非终结符, 返回 2
+    // A 式非终结符, 返回 1
+    // 终结符(包括 ε), 返回 0
+    // 索引越界, 返回 0
+    if (index < (int)str.length())
+    { // index 至少是非终结符
+        if (isupper(str[index]))
+        {
+            if ((index + 1) < (int)str.length())
+            {
+                if (str[index + 1] == 39)
+                {
+                    return 2;
+                }
+            }
+
+            return 1;
+        }
+    }
+
+    // index 索引越界
+    return 0;
 }
 
 Body Grammer::FindLeftBody(std::string body)
