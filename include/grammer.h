@@ -39,7 +39,13 @@ public:
     void DFS(Body &originBody, std::string firstSymbol);
     // 计算 FOLLOW 集
     void CalcFollowSet();
-    // 我有一个神奇的函数, 输入变量, 解决问题
+
+    /**
+     *  @brief 我有一个神奇的函数, 输入变量, 解决问题
+     *  @param str  源字符串
+     *  @param index  开始判断的位置索引
+     *  @return  返回符号的类型
+     */
     int MagicFunction(std::string str, int index);
     // 返回给定的非终结符在产生式左部中所属的 Body
     Body FindLeftBody(std::string body);
