@@ -178,7 +178,7 @@ void Grammer::CalcFollowSet()
         // 候选式长度为 2 有以下可能:
         // 1) ε: 继续循环
         // 2) VN1+VN2: 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
-        // 3) VN+VT: 继续循环
+        // 3) VN+VT: 将 Vt 加入到 FOLLOW(VN)
         // 4) VT+V: 继续循环
 
         auto leftBody = production.GetLeftSide();
@@ -207,10 +207,21 @@ void Grammer::CalcFollowSet()
                         // 将 FIRST(VN2) 中的元素加入到 FOLLOW(VN1) 中
                         VN1Body.MergeFollowSet(VN2Body.GetFirstSet());
                     }
-                    // * 3) VN+VT: 继续循环
-                    else
+                    // * 3) VN+VT: 将 Vt 加入到 FOLLOW(VN)
+                    // 可以怎么理解, VN1 后面是终结符
+                    // 终结符的 "非终结符长度" 为 0
+                    else if (VN2Length == 0)
                     {
-                        continue;
+                        // ε 绝不会出现在 FOLLOW 中
+                        // 除了 ε 以外的终结符长度均为 1
+                        // 在产生式左部中找到非终结符 VN1 所属的 Body&
+                        Body &VN1Body = FindLeftBody(std::string(rightBody, i, VN1Length), true);
+
+                        // 将 VT 加入到 FOLLOW(VN1) 中
+                        std::string VT;
+                        VT.push_back(rightBody[i + VN1Length]);
+                        // VN1Body.MergeFollowSet(VT);
+                        VN1Body.GetFollowSet(true).insert(VT);
                     }
                 }
                 // * 1) ε: 继续循环
@@ -310,7 +321,7 @@ int Grammer::MagicFunction(std::string str, int index)
     // A' 式非终结符, 返回 2
     // A 式非终结符, 返回 1
     // 终结符(包括 ε), 返回 0
-    // 索引越界, 返回 0
+    // 索引越界, 返回 -1
     if (index < (int)str.length())
     { // index 至少是非终结符
         if (isupper(str[index]))
@@ -325,10 +336,15 @@ int Grammer::MagicFunction(std::string str, int index)
 
             return 1;
         }
+        // index 是终结符
+        else
+        {
+            return 0;
+        }
     }
 
     // index 索引越界
-    return 0;
+    return -1;
 }
 
 Body Grammer::FindLeftBody(std::string body)
