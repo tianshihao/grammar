@@ -382,7 +382,7 @@ void Grammer::Print()
     {
         std::cout << "For "
                   << production.GetLeftSide().GetExpression()
-                  << ": \t";
+                  << ": ";
 
         bool bPrintVN = true;
 
