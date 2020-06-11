@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <iostream>
 #include <iterator>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -14,15 +15,17 @@ class Grammer
 {
 private:
     // 非终结符号集, vocabulary of nonterminal
-    std::set<char> VN;
+    std::set<std::string> m_VN;
     // 终结符号集, vocabulary of terminal
-    std::set<char> VT;
+    std::set<std::string> m_VT;
     // 开始符号
     Body m_start;
     // 产生式集
     std::vector<Production> m_productionSet;
     // 文法类型
     int m_type;
+    // 分析表
+    std::vector<std::string> m_pharsingTable;
 
 public:
     // 构造函数

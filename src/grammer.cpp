@@ -20,13 +20,19 @@ Grammer::Grammer(std::string inputText)
 void Grammer::ParseText(std::string inputText)
 {
     // 向输入文本串末尾加换行符
-    inputText = inputText + "\n";
+    inputText = inputText + '\n';
 
     while (!inputText.empty())
     {
-        int index = 0;
-        Production tempProduction;
+        // 已经分析的左部或右部长度
+        // 用于清除已经分析的内容
+        int bodyLength = 0;
+
+        // 临时候选式
         Body tempBody;
+
+        // 临时产生式
+        Production tempProduction;
 
         // 扫描产生式左部
         for (int i = 0;; ++i)
@@ -39,7 +45,7 @@ void Grammer::ParseText(std::string inputText)
                 {
                     if (inputText[i + 1] == '>')
                     {
-                        index = i + 1 + 1;
+                        bodyLength = i + 1;
                         break;
                     }
                 }
@@ -49,33 +55,83 @@ void Grammer::ParseText(std::string inputText)
             tempBody.SetExpression(inputText[i]);
         }
 
-        inputText.erase(0, index);
+        // 添加分析得到的非终结符至产生式左部
         tempProduction.SetLeftSide(tempBody);
+
+        // 同时将该非终结符添加到非终结符号集
+        m_VN.insert(tempBody.GetExpression());
+
+        // 清空此非终结符容器
         tempBody.Clear();
 
+        // 将已经分析的内容删除
+        inputText.erase(0, bodyLength + 1);
+
         // 扫描产生式右部
-        for (int i = 0; (inputText[i] != '\n') && (i < (int)inputText.length()); ++i, index = i)
+        for (int i = 0; (inputText[i] != '\n') && (i < (int)inputText.length()); ++i, bodyLength = i)
         {
-            // 找到一个表达式
+            // 找到一个候选式
             if (inputText[i] == '|')
             {
+                // 添加分析得到的候选式至产生式右部
                 tempProduction.SetRightSide(tempBody);
+
+                // 清空此候选式容器
                 tempBody.Clear();
+
+                // 将已经分析的内容删除
                 inputText.erase(0, i + 1);
+
+                // 重置索引
                 i = -1;
+
                 continue;
+            }
+
+            // 如果找到终结符
+            if (!isupper(inputText[i]) && inputText[i] != 39)
+            {
+                // 空串长度为两个字节
+                // 特殊处理
+                if (inputText[i] == -50)
+                {
+                    std::string VT = "ε";
+                    m_VT.insert(VT);
+                }
+                else if (inputText[i] == -75)
+                {
+                }
+                // 终结符
+                else
+                {
+                    std::string VT;
+                    VT.push_back(inputText[i]);
+
+                    // 将终结符添加到终结符号集中
+                    m_VT.insert(VT);
+                }
             }
 
             tempBody.SetExpression(inputText[i]);
         }
-        tempProduction.SetRightSide(tempBody);
-        inputText.erase(0, index + 1);
 
-        // 找到一个产生式
+        // 添加最后一个得到的候选式至产生式右部
+        tempProduction.SetRightSide(tempBody);
+
+        // 将已经分析的内容删除
+        inputText.erase(0, bodyLength + 1);
+
+        // 得到一个完整的产生式
         m_productionSet.push_back(tempProduction);
     }
 
+    // 确定开始符号
     m_start = m_productionSet[0].GetLeftSide();
+
+    // 将句子左界符添加到终结符号集
+    m_VT.insert(std::string("#"));
+
+    return;
 }
 
 bool Grammer::MergeProduction()
