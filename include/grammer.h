@@ -2,12 +2,13 @@
 #define GRAMMER_H
 
 #include "production.h"
+#include "table.h"
 #include <QtCore>
 #include <iostream>
 #include <iterator>
-#include <map>
 #include <set>
 #include <string>
+#include <tuple>
 #include <vector>
 
 // 文法
@@ -25,7 +26,7 @@ private:
     // 文法类型
     int m_type;
     // 分析表
-    std::vector<std::string> m_pharsingTable;
+    Table m_pharsingTable;
 
 public:
     // 构造函数
@@ -44,7 +45,7 @@ public:
     void CalcFollowSet();
 
     /**
-     *  @brief 我有一个神奇的函数, 输入变量, 解决问题
+     *  @brief  我有一个神奇的函数, 输入变量, 解决问题
      *  @param str  源字符串
      *  @param index  开始判断的位置索引
      *  @return  返回符号的类型
@@ -54,6 +55,11 @@ public:
     Body FindLeftBody(std::string body);
     // 返回给定的非终结符在产生式左部中所属的 Body &
     Body &FindLeftBody(std::string body, bool bRefs);
+
+    /**
+     *  @brief  计算 LL(1) 文法分析表
+     */
+    void CalcLLPrasingTable();
     // 获取文法类型
     int GetType();
     // 设置文法类型

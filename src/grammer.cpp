@@ -14,6 +14,7 @@ Grammer::Grammer(std::string inputText)
     CalcFirstSet();
     CalcFollowSet();
     Print();
+    CalcLLPrasingTable();
 }
 
 // 解析输入文本
@@ -429,6 +430,60 @@ Body &Grammer::FindLeftBody(std::string body, bool bRefs)
     }
 
     // return Body();
+}
+
+void Grammer::CalcLLPrasingTable()
+{
+    // 分析表中没必要出现空串
+    std::string nullString = "ε";
+    m_VT.erase(nullString);
+
+    // 初始化分析表
+    m_pharsingTable.InitTable(m_VN, m_VT);
+
+    // for 文法 G 的每个产生式 A->γ1|γ2|...|γm
+    // {
+    //     if a∈FIRST(γi) 置 M[A,a] = "A->γi";
+    //     if ε∈FIRST(γi)
+    //         for 任何 a∈FOLLOW(A)
+    //         {
+    //             置 M[A,a] = "A->γi"
+    //         }
+    // }
+
+    for (auto production : m_productionSet)
+    {
+        Body leftBody = production.GetLeftSide();
+
+        for (Body rightBody : production.GetRightSide())
+        {
+            // 行头
+            std::string row = leftBody.GetExpression();
+
+            // 规则 1
+            // FIRST 集
+            if (rightBody.GetExpression() != nullString)
+            {
+                for (auto column : rightBody.GetFirstSet())
+                {
+                    m_pharsingTable.SetCellData(row, column, rightBody.GetExpression());
+                }
+            }
+            // 规则 2
+            // FOLLOW 集
+            else
+            {
+                for (auto column : leftBody.GetFollowSet())
+                {
+                    m_pharsingTable.SetCellData(row, column, rightBody.GetExpression());
+                }
+            }
+        }
+    }
+
+    m_pharsingTable.PrintTable();
+
+    return;
 }
 
 // 获取文法类型
