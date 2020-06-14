@@ -13,6 +13,7 @@ set(SOURCES
     src/body.cpp
     src/production.cpp
     src/grammer.cpp
+    src/table.cpp
 )
 
 # 头文件
