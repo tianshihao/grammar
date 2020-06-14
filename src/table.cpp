@@ -35,28 +35,25 @@ void Table::SetCellData(std::string row, std::string column, std::string content
 
 void Table::PrintTable()
 {
-    int printRow = m_row + 2;
-    int printColumn = m_column + 1;
-    int cellWidth = 12;
+    int cellWidth = 16;
 
-    // std::cout << std::fixed << std::left;
-
-    std::cout << std::setw(cellWidth) << std::setfill(' ') << " ";
-    auto itColumnHeader = m_columnHeader.begin();
+    std::cout << std::fixed << std::left;
 
     // 打印列头
+    std::cout << std::setw(cellWidth) << std::setfill(' ') << " ";
+
+    auto itColumnHeader = m_columnHeader.begin();
+
     for (int i = 0; i < m_column; ++i, itColumnHeader++)
     {
-        std::cout << "|";
         std::cout << std::setw(cellWidth) << itColumnHeader->first;
     }
 
     std::cout << "\n";
-    std::cout << std::setfill(' ');
-
-    auto itRowHeader = m_rowHeader.begin();
 
     // 按行打印表格内容
+    auto itRowHeader = m_rowHeader.begin();
+
     for (int i = 0; i < m_row; ++i, itRowHeader++)
     {
         std::cout << std::setw(cellWidth) << itRowHeader->first;
@@ -64,6 +61,12 @@ void Table::PrintTable()
         for (int j = 0; j < m_column; ++j)
         {
             std::cout << std::setw(cellWidth) << m_cells[i * m_column + j];
+
+            // 希腊字母 ε 存储长度为2, 显示长度为 1
+            if (m_cells[i * m_column + j][m_cells[i * m_column + j].length() - 1] < 0)
+            {
+                std::cout << " ";
+            }
         }
 
         std::cout << "\n";
