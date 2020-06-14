@@ -2,68 +2,71 @@
 
 void Table::InitTable(std::set<std::string> __VN, std::set<std::string> __VT)
 {
-    int value = 0;
+    // 将 __VN 添加到映射中,
+    // 以非终结符为键, 索引为值.
+    int nValue = 0;
     for (auto symbol : __VN)
     {
-        m_rowHeader.insert(std::pair<std::string, int>(symbol, value++));
+        m_mapRowHeader.insert(std::pair<std::string, int>(symbol, nValue++));
     }
 
-    m_row = value;
+    // 确定表格行数.
+    m_nRow = nValue;
 
-    value = 0;
+    nValue = 0;
     for (auto symbol : __VT)
     {
-        m_columnHeader.insert(std::pair<std::string, int>(symbol, value++));
+        m_mapColumnHeader.insert(std::pair<std::string, int>(symbol, nValue++));
     }
 
-    m_column = value;
+    m_nColumn = nValue;
 
-    m_size = m_row * m_column;
+    m_nSize = m_nRow * m_nColumn;
 
-    for (int i = 0; i < m_size; ++i)
+    for (int i = 0; i < m_nSize; ++i)
     {
-        m_cells.push_back(std::string("error"));
+        m_vecCells.push_back(std::string("error"));
     }
 
     return;
 }
 
-void Table::SetCellData(std::string row, std::string column, std::string content)
+void Table::SetCellData(std::string __leftBody, std::string __column, std::string __rightBody)
 {
-    m_cells[m_rowHeader[row] * m_column + m_columnHeader[column]] = row + "->" + content;
+    m_vecCells[m_mapRowHeader[__leftBody] * m_nColumn + m_mapColumnHeader[__column]] = __leftBody + "->" + __rightBody;
 }
 
 void Table::PrintTable()
 {
-    int cellWidth = 16;
+    int nCellWidth = 16;
 
     std::cout << std::fixed << std::left;
 
     // 打印列头
-    std::cout << std::setw(cellWidth) << std::setfill(' ') << " ";
+    std::cout << std::setw(nCellWidth) << std::setfill(' ') << " ";
 
-    auto itColumnHeader = m_columnHeader.begin();
+    auto itColumnHeader = m_mapColumnHeader.begin();
 
-    for (int i = 0; i < m_column; ++i, itColumnHeader++)
+    for (int i = 0; i < m_nColumn; ++i, itColumnHeader++)
     {
-        std::cout << std::setw(cellWidth) << itColumnHeader->first;
+        std::cout << std::setw(nCellWidth) << itColumnHeader->first;
     }
 
     std::cout << "\n";
 
-    // 按行打印表格内容
-    auto itRowHeader = m_rowHeader.begin();
+    // 按行打印表格内容.
+    auto itRowHeader = m_mapRowHeader.begin();
 
-    for (int i = 0; i < m_row; ++i, itRowHeader++)
+    for (int i = 0; i < m_nRow; ++i, itRowHeader++)
     {
-        std::cout << std::setw(cellWidth) << itRowHeader->first;
+        std::cout << std::setw(nCellWidth) << itRowHeader->first;
 
-        for (int j = 0; j < m_column; ++j)
+        for (int j = 0; j < m_nColumn; ++j)
         {
-            std::cout << std::setw(cellWidth) << m_cells[i * m_column + j];
+            std::cout << std::setw(nCellWidth) << m_vecCells[i * m_nColumn + j];
 
-            // 希腊字母 ε 存储长度为2, 显示长度为 1
-            if (m_cells[i * m_column + j][m_cells[i * m_column + j].length() - 1] < 0)
+            // 希腊字母 ε 存储长度为2, 显示长度为 1.
+            if (m_vecCells[i * m_nColumn + j][m_vecCells[i * m_nColumn + j].length() - 1] < 0)
             {
                 std::cout << " ";
             }
@@ -71,8 +74,6 @@ void Table::PrintTable()
 
         std::cout << "\n";
     }
-
-    std::cout << "\n";
 
     return;
 }

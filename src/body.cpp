@@ -1,89 +1,80 @@
 #include "body.h"
 
-// 获得候选式
 std::string Body::GetExpression()
 {
-    return m_expression;
+    return m_strExpression;
 }
 
-// 向候选式中添加数据
-void Body::SetExpression(char ch)
+void Body::SetExpression(char __ch)
 {
-    m_expression.push_back(ch);
+    m_strExpression.push_back(__ch);
 }
 
-// 获取 FirstSet
 std::set<std::string> Body::GetFirstSet()
 {
-    return m_firstSet;
+    return m_setFirstSet;
 }
 
-// 向 FirstSet 中添加数据
-void Body::SetFirstSet(std::string symbol)
+void Body::SetFirstSet(std::string __symbol)
 {
-    m_firstSet.insert(symbol);
+    m_setFirstSet.insert(__symbol);
 }
 
-// 获得非终结符的 FOLLOW 集
 std::set<std::string> Body::GetFollowSet()
 {
-    return m_followSet;
+    return m_setFollowSet;
 }
 
-std::set<std::string> &Body::GetFollowSet(bool bRefs)
+std::set<std::string> &Body::GetFollowSet(bool __bRefs)
 {
-    return m_followSet;
+    return m_setFollowSet;
 }
 
-// 向非终结符的 FOLLOW 集中添加终结符
-void Body::SetFollowSet(const std::string &symbol)
+void Body::SetFollowSet(const std::string &__symbol)
 {
-    m_followSet.insert(symbol);
+    m_setFollowSet.insert(__symbol);
 }
 
-void Body::MergeFollowSet(std::set<std::string> set)
+void Body::MergeFollowSet(std::set<std::string> __set)
 {
-    // m_followSet.merge(set);
-    for (auto str : set)
+    for (auto str : __set)
     {
-        m_followSet.insert(str);
+        m_setFollowSet.insert(str);
     }
 }
 
-// 获取候选式首符
 std::string Body::GetFirstSymbol()
 {
-    // return m_expression[0];
-    if (m_expression.length() >= 2)
+    // return m_strExpression[0];
+    if (m_strExpression.length() >= 2)
     {
         // 如果首符是 A' 式非终结符
-        if (m_expression[1] == 39)
+        if (m_strExpression[1] == 39)
         {
-            return std::string(m_expression, 0, 2);
+            return std::string(m_strExpression, 0, 2);
         }
         // 如果首符是 ε, 长度为两个字节
-        else if ((m_expression[0] == -50) && (m_expression[1] == -75))
+        else if ((m_strExpression[0] == -50) && (m_strExpression[1] == -75))
         {
-            return std::string(m_expression, 0, 2);
+            return std::string(m_strExpression, 0, 2);
         }
         // 首符可以用 ASCII 表示, 长度为一个字节 else
         {
-            return std::string(m_expression, 0, 1);
+            return std::string(m_strExpression, 0, 1);
         }
     }
     else
     {
-        return std::string(m_expression, 0, 1);
+        return std::string(m_strExpression, 0, 1);
     }
 
     return std::string();
 }
 
-// 候选式首符是否为终结符
 bool Body::IsTerminal()
 {
-    // return islower(m_expression[0]);
-    if (isupper(m_expression[0]))
+    // return islower(m_strExpression[0]);
+    if (isupper(m_strExpression[0]))
     {
         return false;
     }
@@ -93,10 +84,9 @@ bool Body::IsTerminal()
     }
 }
 
-// 清空候选式
 void Body::Clear()
 {
-    m_expression.clear();
-    m_firstSet.clear();
-    m_followSet.clear();
+    m_strExpression.clear();
+    m_setFirstSet.clear();
+    m_setFollowSet.clear();
 }

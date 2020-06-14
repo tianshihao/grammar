@@ -1,27 +1,21 @@
 #include "production.h"
 
-// 获取产生式左部数据
 Body &Production::GetLeftSide()
 {
-    // 值传递, 调用复制构造函数
-    return m_leftSide;
+    return m_bodyLeft;
 }
 
-// 设置产生式左部数据
-void Production::SetLeftSide(Body leftSide)
+void Production::SetLeftSide(Body __bodyLeft)
 {
-    m_leftSide = leftSide;
-    // m_leftSide(leftSide);
+    m_bodyLeft = __bodyLeft;
 }
 
-// 获取产生式右部的候选式向量
 std::vector<Body> &Production::GetRightSide()
 {
-    return m_rightSide;
+    return m_vecRightSide;
 }
 
-// 向产生式右部添加候选式
-void Production::SetRightSide(Body rightSide)
+void Production::SetRightSide(Body __bodyRight)
 {
-    m_rightSide.push_back(rightSide);
+    m_vecRightSide.push_back(__bodyRight);
 }
