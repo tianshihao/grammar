@@ -2,6 +2,8 @@
 
 A graphical program for processing grammar.
 
+编译器：g++ 8.1.0
+
 ## Q&A
 
 + 运行编译生成的可执行文件提示“无法定位程序输入点……于动态链接库.\build\grammer.exe”上

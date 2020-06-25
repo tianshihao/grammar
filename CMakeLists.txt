@@ -14,7 +14,6 @@ set(SOURCES
     src/production.cpp
     src/grammer.cpp
     src/table.cpp
-    src/main.cpp
 )
 
 # 头文件
@@ -27,7 +26,7 @@ set(HEADERS
 
 # add_executable() 须放在 target_link_libraries() 之前
 # 向项目中添加使用指定源文件的可执行文件
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} main.cpp)
 
 add_executable(test test.cpp)
 
