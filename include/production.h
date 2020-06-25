@@ -10,7 +10,7 @@
 class Production
 {
 private:
-    Body m_bodyLeft;                  /// 产生式左部.
+    Body m_bodyLeftSide;              /// 产生式左部.
     std::vector<Body> m_vecRightSide; /// 产生式右部.
 
 public:

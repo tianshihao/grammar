@@ -1,5 +1,5 @@
-﻿#ifndef GRAMMER_H
-#define GRAMMER_H
+﻿#ifndef GRAMMAR_H
+#define GRAMMAR_H
 
 #include "production.h"
 #include "table.h"
@@ -14,7 +14,7 @@
 /**
  * @brief 文法.
  */
-class Grammer
+class Grammar
 {
 private:
     std::set<std::string> m_setVN;              /// 非终结符号集, vocabulary of nonterminal.
@@ -28,12 +28,12 @@ public:
     /**
      * @brief 构造函数.
      */
-    Grammer();
+    Grammar();
 
     /**
      * @brief 构造函数重载.
      */
-    Grammer(std::string __strInputText);
+    Grammar(std::string __strInputText);
 
     /**
      * @brief 解析输入文本.
@@ -96,7 +96,7 @@ public:
     /**
      * @brief 打印文法.
      */
-    void PrintGrammer();
+    void Printgrammar();
 };
 
 #endif

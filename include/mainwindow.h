@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "grammer.h"
+#include "grammar.h"
 #include <QButtonGroup>
 #include <QByteArray>
 #include <QFile>

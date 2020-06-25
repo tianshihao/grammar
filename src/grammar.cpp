@@ -1,20 +1,20 @@
-﻿#include "grammer.h"
+﻿#include "grammar.h"
 
-Grammer::Grammer()
+Grammar::Grammar()
 {
 }
 
-Grammer::Grammer(std::string __strInputText)
+Grammar::Grammar(std::string __strInputText)
 {
     ParseText(__strInputText);
     MergeProduction();
     CalcFirstSet();
     CalcFollowSet();
-    PrintGrammer();
+    Printgrammar();
     CalcLL1PrasingTable();
 }
 
-void Grammer::ParseText(std::string __strInputText)
+void Grammar::ParseText(std::string __strInputText)
 {
     // 向输入文本串末尾加换行符.
     __strInputText = __strInputText + '\n';
@@ -138,7 +138,7 @@ void Grammer::ParseText(std::string __strInputText)
     return;
 }
 
-bool Grammer::MergeProduction()
+bool Grammar::MergeProduction()
 {
     // 标志位.
     bool bMerged = false;
@@ -165,7 +165,7 @@ bool Grammer::MergeProduction()
     return bMerged;
 }
 
-void Grammer::CalcFirstSet()
+void Grammar::CalcFirstSet()
 {
     for (auto &production : m_vecProductionSet)
     {
@@ -192,7 +192,7 @@ void Grammer::CalcFirstSet()
     return;
 }
 
-void Grammer::DFS(Body &__bodyOrigin, std::string __strFirstSymbol)
+void Grammar::DFS(Body &__bodyOrigin, std::string __strFirstSymbol)
 {
     // 遍历所有产生式, 得到非终结符 __strFirstSymbol 的 FIRST.
     for (auto &production : m_vecProductionSet)
@@ -222,7 +222,7 @@ void Grammer::DFS(Body &__bodyOrigin, std::string __strFirstSymbol)
     return;
 }
 
-void Grammer::CalcFollowSet()
+void Grammar::CalcFollowSet()
 {
     // 1. 对文法的开始符号 S, 令 #∈FOLLOW(S).
     m_vecProductionSet[0].GetLeftSide().SetFollowSet(std::string("#"));
@@ -372,7 +372,7 @@ void Grammer::CalcFollowSet()
     return;
 }
 
-int Grammer::MagicFunction(std::string __str, int __nIndex)
+int Grammar::MagicFunction(std::string __str, int __nIndex)
 {
     // A' 式非终结符, 返回 2;
     // A 式非终结符, 返回 1;
@@ -404,7 +404,7 @@ int Grammer::MagicFunction(std::string __str, int __nIndex)
     return -1;
 }
 
-Body Grammer::FindLeftBody(std::string __strBody)
+Body Grammar::FindLeftBody(std::string __strBody)
 {
     for (auto production : m_vecProductionSet)
     {
@@ -418,7 +418,7 @@ Body Grammer::FindLeftBody(std::string __strBody)
     return Body();
 }
 
-Body &Grammer::FindLeftBody(std::string __strBody, bool __bRefs)
+Body &Grammar::FindLeftBody(std::string __strBody, bool __bRefs)
 {
     for (auto &production : m_vecProductionSet)
     {
@@ -430,7 +430,7 @@ Body &Grammer::FindLeftBody(std::string __strBody, bool __bRefs)
     }
 }
 
-void Grammer::CalcLL1PrasingTable()
+void Grammar::CalcLL1PrasingTable()
 {
     // 分析表中没必要出现空串.
     std::string strNullString = "ε";
@@ -482,22 +482,22 @@ void Grammer::CalcLL1PrasingTable()
     return;
 }
 
-int Grammer::GetType()
+int Grammar::GetType()
 {
     return m_nType;
 }
 
-void Grammer::SetType(int type)
+void Grammar::SetType(int type)
 {
     m_nType = type;
 }
 
-void Grammer::PrintGrammer()
+void Grammar::Printgrammar()
 {
     std::ofstream outFile;
     outFile.open("result.txt");
 
-    outFile << "The Grammer" << std::endl;
+    outFile << "The Grammar" << std::endl;
     outFile << "start symbol: " << m_bodyStart.GetExpression() << std::endl;
     outFile << "Production" << std::endl;
 

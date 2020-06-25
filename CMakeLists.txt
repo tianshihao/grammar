@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.7)
 
 # 项目名称
-project(grammer)
+project(grammar)
 
 # 设置自动生成 moc 文件
 set(CMAKE_AUTOMOC ON)
@@ -12,7 +12,7 @@ set(SOURCES
     src/mainwindow.cpp
     src/body.cpp
     src/production.cpp
-    src/grammer.cpp
+    src/grammar.cpp
     src/table.cpp
     src/main.cpp
 )
@@ -22,7 +22,7 @@ set(HEADERS
     include/mainwindow.h
     include/body.h
     include/production.h
-    include/grammer.h
+    include/grammar.h
 )
 
 # add_executable() 须放在 target_link_libraries() 之前
@@ -54,6 +54,6 @@ target_link_libraries(${PROJECT_NAME}
         Qt5::Widgets
 )
 
-SET(CMAKE_BUILD_TYPE "Debug")
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
-SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+SET(CMAKE_BUILD_TYPE "Release")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb -mwindows")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall -mwindows")

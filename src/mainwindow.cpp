@@ -45,7 +45,7 @@ MainWindow::~MainWindow()
 void MainWindow::ParsingText()
 {
     // 获取输入文本
-    Grammer G(m_inputArea->toPlainText().toStdString());
+    Grammar G(m_inputArea->toPlainText().toStdString());
 
     DisplayResult();
 

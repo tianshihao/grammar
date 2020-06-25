@@ -1,4 +1,4 @@
-# grammer
+# grammar
 
 A graphical program for processing grammar.
 
@@ -6,7 +6,7 @@ A graphical program for processing grammar.
 
 ## Q&A
 
-+ 运行编译生成的可执行文件提示“无法定位程序输入点……于动态链接库.\build\grammer.exe”上
++ 运行编译生成的可执行文件提示“无法定位程序输入点……于动态链接库.\build\grammar.exe”上
 
 实验dependency walker查看生成的可执行文件，发现了缺失DLL文件，将DLL文件复制到了可执行文件所在目录解决问题。
 

@@ -2,12 +2,12 @@
 
 Body &Production::GetLeftSide()
 {
-    return m_bodyLeft;
+    return m_bodyLeftSide;
 }
 
 void Production::SetLeftSide(Body __bodyLeft)
 {
-    m_bodyLeft = __bodyLeft;
+    m_bodyLeftSide = __bodyLeft;
 }
 
 std::vector<Body> &Production::GetRightSide()
