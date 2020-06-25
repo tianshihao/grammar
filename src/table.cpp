@@ -36,44 +36,49 @@ void Table::SetCellData(std::string __leftBody, std::string __column, std::strin
     m_vecCells[m_mapRowHeader[__leftBody] * m_nColumn + m_mapColumnHeader[__column]] = __leftBody + "->" + __rightBody;
 }
 
-void Table::PrintTable()
+void Table::Print()
 {
+    std::ofstream outFile;
+    outFile.open("result.txt", std::ios::openmode::_S_app);
+
     int nCellWidth = 16;
 
-    std::cout << std::fixed << std::left;
+    outFile << std::fixed << std::left;
 
     // 打印列头
-    std::cout << std::setw(nCellWidth) << std::setfill(' ') << " ";
+    outFile << std::setw(nCellWidth) << std::setfill(' ') << " ";
 
     auto itColumnHeader = m_mapColumnHeader.begin();
 
     for (int i = 0; i < m_nColumn; ++i, itColumnHeader++)
     {
-        std::cout << std::setw(nCellWidth) << itColumnHeader->first;
+        outFile << std::setw(nCellWidth) << itColumnHeader->first;
     }
 
-    std::cout << "\n";
+    outFile << "\n";
 
     // 按行打印表格内容.
     auto itRowHeader = m_mapRowHeader.begin();
 
     for (int i = 0; i < m_nRow; ++i, itRowHeader++)
     {
-        std::cout << std::setw(nCellWidth) << itRowHeader->first;
+        outFile << std::setw(nCellWidth) << itRowHeader->first;
 
         for (int j = 0; j < m_nColumn; ++j)
         {
-            std::cout << std::setw(nCellWidth) << m_vecCells[i * m_nColumn + j];
+            outFile << std::setw(nCellWidth) << m_vecCells[i * m_nColumn + j];
 
             // 希腊字母 ε 存储长度为2, 显示长度为 1.
             if (m_vecCells[i * m_nColumn + j][m_vecCells[i * m_nColumn + j].length() - 1] < 0)
             {
-                std::cout << " ";
+                outFile << " ";
             }
         }
 
-        std::cout << "\n";
+        outFile << "\n";
     }
+
+    outFile.close();
 
     return;
 }

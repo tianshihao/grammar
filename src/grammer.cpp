@@ -2,7 +2,6 @@
 
 Grammer::Grammer()
 {
-    std::cout << "This is a grammer" << std::endl;
 }
 
 Grammer::Grammer(std::string __strInputText)
@@ -12,7 +11,7 @@ Grammer::Grammer(std::string __strInputText)
     CalcFirstSet();
     CalcFollowSet();
     PrintGrammer();
-    CalcLLPrasingTable();
+    CalcLL1PrasingTable();
 }
 
 void Grammer::ParseText(std::string __strInputText)
@@ -35,6 +34,13 @@ void Grammer::ParseText(std::string __strInputText)
         // 扫描产生式左部.
         for (int i = 0;; ++i)
         {
+            // 如果文法后面有多余的换行符.
+            if (__strInputText[i] == '\n')
+            {
+                __strInputText.clear();
+                return;
+            }
+
             // 检查箭头 "->".
             if (__strInputText[i] == '-')
             {
@@ -424,7 +430,7 @@ Body &Grammer::FindLeftBody(std::string __strBody, bool __bRefs)
     }
 }
 
-void Grammer::CalcLLPrasingTable()
+void Grammer::CalcLL1PrasingTable()
 {
     // 分析表中没必要出现空串.
     std::string strNullString = "ε";
@@ -471,7 +477,7 @@ void Grammer::CalcLLPrasingTable()
         }
     }
 
-    m_tablePharsingTable.PrintTable();
+    m_tablePharsingTable.Print();
 
     return;
 }
@@ -488,15 +494,18 @@ void Grammer::SetType(int type)
 
 void Grammer::PrintGrammer()
 {
-    std::cout << "The Grammer" << std::endl;
-    std::cout << "start symbol: " << m_bodyStart.GetExpression() << std::endl;
-    std::cout << "Production" << std::endl;
+    std::ofstream outFile;
+    outFile.open("result.txt");
+
+    outFile << "The Grammer" << std::endl;
+    outFile << "start symbol: " << m_bodyStart.GetExpression() << std::endl;
+    outFile << "Production" << std::endl;
 
     for (auto production : m_vecProductionSet)
     {
-        std::cout << "For "
-                  << production.GetLeftSide().GetExpression()
-                  << ": ";
+        outFile << "For "
+                << production.GetLeftSide().GetExpression()
+                << ": ";
 
         bool bPrintVN = true;
 
@@ -504,43 +513,45 @@ void Grammer::PrintGrammer()
         if (bPrintVN)
         {
             auto body = production.GetLeftSide();
-            std::cout << "FIRST("
-                      << body.GetExpression()
-                      << ")={";
+            outFile << "FIRST("
+                    << body.GetExpression()
+                    << ")={";
             for (auto symbol : body.GetFirstSet())
             {
-                std::cout << " " << symbol << " ";
+                outFile << " " << symbol << " ";
             }
 
-            std::cout << "}\t";
+            outFile << "}\t";
 
-            std::cout << "FOLLOW("
-                      << body.GetExpression()
-                      << ")={";
+            outFile << "FOLLOW("
+                    << body.GetExpression()
+                    << ")={";
             for (auto symbol : body.GetFollowSet())
             {
-                std::cout << " " << symbol << " ";
+                outFile << " " << symbol << " ";
             }
 
-            std::cout << "}\t";
+            outFile << "}\t";
         }
 
         for (auto body : production.GetRightSide())
         {
-            std::cout << "FIRST("
-                      << body.GetExpression()
-                      << ")={";
+            outFile << "FIRST("
+                    << body.GetExpression()
+                    << ")={";
 
             for (auto symbol : body.GetFirstSet())
             {
-                std::cout << " " << symbol << " ";
+                outFile << " " << symbol << " ";
             }
 
-            std::cout << "}\t\t";
+            outFile << "}\t\t";
         }
 
-        std::cout << std::endl;
+        outFile << std::endl;
     }
+
+    outFile.close();
 
     return;
 }

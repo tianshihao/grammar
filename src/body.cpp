@@ -48,17 +48,17 @@ std::string Body::GetFirstSymbol()
     // return m_strExpression[0];
     if (m_strExpression.length() >= 2)
     {
-        // 如果首符是 A' 式非终结符
+        // 如果首符是 A' 式非终结符.
         if (m_strExpression[1] == 39)
         {
             return std::string(m_strExpression, 0, 2);
         }
-        // 如果首符是 ε, 长度为两个字节
+        // 如果首符是 ε, 长度为两个字节.
         else if ((m_strExpression[0] == -50) && (m_strExpression[1] == -75))
         {
             return std::string(m_strExpression, 0, 2);
         }
-        // 首符可以用 ASCII 表示, 长度为一个字节 else
+        // 首符可以用 ASCII 表示, 长度为一个字节 else.
         {
             return std::string(m_strExpression, 0, 1);
         }

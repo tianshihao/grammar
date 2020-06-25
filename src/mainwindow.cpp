@@ -15,21 +15,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     m_buttonArea = new QWidget(this);
     m_buttonArea->setFixedSize(200, 600);
 
-    // 按钮们
-    m_pushButton1 = new QPushButton(m_buttonArea);
-    m_pushButton1->setText((QString) "这是一个按钮");
-
-    m_pushButton2 = new QPushButton(m_buttonArea);
-    m_pushButton2->setText((QString) "这是另外一个按钮");
-
-    m_pushButton3 = new QPushButton(m_buttonArea);
-    m_pushButton3->setText((QString) "这是一个复读按钮");
+    // 按钮
+    m_pushButton = new QPushButton(m_buttonArea);
+    m_pushButton->setText((QString) "分析文法");
 
     // 按钮区的布局
     m_buttonLayout = new QVBoxLayout(m_buttonArea);
-    m_buttonLayout->addWidget(m_pushButton1);
-    m_buttonLayout->addWidget(m_pushButton2);
-    m_buttonLayout->addWidget(m_pushButton3);
+    m_buttonLayout->addWidget(m_pushButton);
 
     // m_buttonArea->setLayout(m_buttonLayout);
 
@@ -43,17 +35,36 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     this->setCentralWidget(m_centralWidget);
 
-    connect(m_pushButton1, SIGNAL(clicked()), this, SLOT(PassText()));
+    connect(m_pushButton, SIGNAL(clicked()), this, SLOT(ParsingText()));
 }
 
 MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::PassText()
+void MainWindow::ParsingText()
 {
     // 获取输入文本
     Grammer G(m_inputArea->toPlainText().toStdString());
+
+    DisplayResult();
+
+    return;
+}
+
+void MainWindow::DisplayResult()
+{
+    QFile inFile("result.txt");
+
+    if (!inFile.open(QFile::ReadOnly | QFile::Text))
+        qDebug() << "Can not open";
+
+    QByteArray byteArray = inFile.readAll();
+    QString strData = QString::fromUtf8(byteArray.data());
+
+    m_outputArea->setText(strData);
+
+    inFile.close();
 
     return;
 }
